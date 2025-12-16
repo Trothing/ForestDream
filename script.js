@@ -12,7 +12,7 @@ function initAudio() {
 
         backgroundMusic = new Audio('music.mp3');
         backgroundMusic.loop = true;
-        backgroundMusic.volume = 0.3;
+        backgroundMusic.volume = 0.5;
 
         const source1 = audioContext.createMediaElementSource(backgroundMusic);
         source1.connect(audioContext.destination);
@@ -235,4 +235,5 @@ async function startSequence() {
 }
 
 startSequence();
+
 
