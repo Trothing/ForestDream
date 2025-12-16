@@ -60,7 +60,6 @@ async function typeText(text, speed = 30, className = "") {
 
     }
 
-    // Зупиняємо звук друку
     stopTypingSound();
     cursor.remove();
 }
@@ -235,5 +234,6 @@ async function startSequence() {
 }
 
 startSequence();
+
 
 
