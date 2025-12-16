@@ -103,6 +103,32 @@ a.btn:hover {
     box-shadow: 0 0 15px #fff;
 }
 
+button.btn {
+    color: #000;
+    background: #33ff00;
+    text-decoration: none;
+    padding: 8px 15px;
+    margin-top: 15px;
+    display: inline-block;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    font-family: 'VT323', monospace;
+    font-size: 1em;
+}
+
+button.btn:hover {
+    background: #fff;
+    box-shadow: 0 0 15px #fff;
+}
+
+button.btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 5px;
