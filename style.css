@@ -16,6 +16,7 @@ body {
     font-size: clamp(16px, 4vw, 24px);
     text-shadow: 0 0 5px #33ff00;
     line-height: 1.4;
+    padding-top: 70px;
 }
 
 body::before {
@@ -143,3 +144,4 @@ button.btn:disabled {
         margin-bottom: 2px;
     }
 }
+
