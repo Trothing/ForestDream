@@ -6,6 +6,24 @@ let backgroundMusic = null;
 let typingSound = null;
 let musicStarted = false;
 
+function stopAllAudio() {
+    if (typingSound) {
+        typingSound.pause();
+        typingSound.currentTime = 0;
+    }
+
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+
+    if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close();
+        audioContext = null;
+    }
+}
+
+
 function initAudio() {
     if (!musicStarted) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -235,6 +253,7 @@ async function startSequence() {
 
 startSequence();
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { stopAllAudio(); } });
+
 
 
 
