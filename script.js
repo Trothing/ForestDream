@@ -133,7 +133,7 @@ async function bootSequence() {
     await sleep(600);
     await typeText("[WARNING] FILE CORRUPTED. RUNNING DIAGNOSTICS...", 15, "error");
     await sleep(400);
-    await typeText("  Analyzing silence_duration... 247 HOURS", 15);
+    await typeText("  Analyzing silence_duration... 125 DAYS", 15);
     await typeText("  Checking awkwardness_level... MODERATE", 15);
     await typeText("  Scanning care_factor... STILL HIGH", 15, "system-msg");
     await sleep(500);
@@ -252,6 +252,7 @@ async function startSequence() {
 }
 
 startSequence();
+
 
 
 
