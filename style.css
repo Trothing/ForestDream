@@ -10,12 +10,11 @@ body {
     color: #33ff00;
     font-family: 'VT323', monospace;
     padding: 10px;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: scroll;
     font-size: clamp(16px, 4vw, 24px);
     text-shadow: 0 0 5px #33ff00;
     line-height: 1.4;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 body::before {
@@ -46,6 +45,7 @@ body::before {
 }
 
 #console {
+    height: 100vh;
     max-width: 900px;
     width: 100%;
     margin: 0 auto;
@@ -54,6 +54,11 @@ body::before {
     padding: 10px;
     padding-top: 50px;
     padding-bottom: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    scroll-behavior: auto;
+    overscroll-behavior: contain;
 }
 
 .line {
