@@ -252,7 +252,8 @@ async function startSequence() {
 }
 
 startSequence();
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { stopAllAudio(); } });
+
+
 
 
 
