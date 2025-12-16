@@ -10,15 +10,13 @@ function initAudio() {
     if (!musicStarted) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Фонова музика
         backgroundMusic = new Audio('music.mp3');
         backgroundMusic.loop = true;
-        backgroundMusic.volume = 0.1;
+        backgroundMusic.volume = 0.3;
 
         const source1 = audioContext.createMediaElementSource(backgroundMusic);
         source1.connect(audioContext.destination);
 
-        // Звук клавіатури
         typingSound = new Audio('typing.mp3');
         typingSound.loop = true;
         typingSound.volume = 0.5;
@@ -52,7 +50,6 @@ async function typeText(text, speed = 30, className = "") {
     cursor.className = 'cursor';
     line.appendChild(cursor);
 
-    // Запускаємо звук друку, якщо текст не пустий
     if (text.length > 0) {
         startTypingSound();
     }
@@ -60,11 +57,8 @@ async function typeText(text, speed = 30, className = "") {
     for (let i = 0; i < text.length; i++) {
         cursor.before(text[i]);
         await sleep(speed);
-        // М'яка прокрутка тільки якщо елемент не видно
-        const rect = line.getBoundingClientRect();
-        if (rect.bottom > window.innerHeight || rect.top < 0) {
-            line.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+
     }
 
     // Зупиняємо звук друку
@@ -96,20 +90,17 @@ async function clearScreen() {
 
 async function simulateTyping(text, elementId) {
     const element = document.getElementById(elementId);
-    
-    // Запускаємо звук друку
+
     startTypingSound();
-    
+
     for (let i = 0; i < text.length; i++) {
         element.textContent += text[i];
         await sleep(150);
     }
-    
-    // Зупиняємо звук друку
+
     stopTypingSound();
 }
 
-// PHASE 1: BOOT SEQUENCE
 async function bootSequence() {
     await sleep(500);
     await typeText("BIOS DATE 15/12/2025 14:22:56 VER 1.02", 10, "system-msg");
@@ -136,13 +127,11 @@ async function bootSequence() {
     await typeText(">> BOOT COMPLETE", 15, "system-msg");
     await sleep(1000);
 
-    // Clear screen
     await typeText(">> CLEARING SCREEN...", 10, "system-msg");
     await sleep(500);
     await clearScreen();
 }
 
-// PHASE 2: MESSAGE ATTEMPTS WITH FAKE CHOICE
 async function messageSequence() {
     await sleep(500);
 
@@ -170,6 +159,17 @@ async function messageSequence() {
     await sleep(300);
     await typeText("> Я думаю, що ми могли б відновити наше спілкування", 50);
     await typeText("> Мені просто цікаво, як ти.", 50);
+    await sleep(800);
+    await typeText("", 0);
+    await typeText("LOADING: casual_questions.dat", 15, "system-msg");
+    await sleep(300);
+    await typeText("> Як день?", 50);
+    await typeText("> Що снідала?", 50);
+    await typeText("> Що нового у житті?", 50);
+    await typeText("> Все добре?", 50);
+    await sleep(500);
+    await typeText("SYSTEM: Questions loaded successfully", 15, "system-msg");
+
 
     await sleep(1000);
     await typeText("", 0);
@@ -186,7 +186,7 @@ async function messageSequence() {
     const cursorEl = document.getElementById('userInput').nextElementSibling;
     if (cursorEl) cursorEl.remove();
 
-    await typeText("[ERROR] Некоректна відповідь. Ти точно хотів написати 'Y'.", 30, "error");
+    await typeText("[ERROR] Некоректна відповідь. Ти точно хотіла написати 'Y'.", 30, "error");
     await sleep(600);
     await typeText("SYSTEM: Автокорекція активована... Інтерпретовано як 'Y'", 20, "system-msg");
     await sleep(800);
@@ -195,7 +195,6 @@ async function messageSequence() {
     await sleep(1000);
 }
 
-// PHASE 3: FINAL - BUTTON ONLY
 async function finalSequence() {
     await typeText("", 0);
     await typeText(">> CONNECTION ESTABLISHED", 20, "system-msg");
@@ -209,7 +208,6 @@ async function finalSequence() {
 }
 
 async function startSequence() {
-    // Показуємо кнопку запуску
     await typeText("SYSTEM_RESTORE.EXE", 20, "system-msg");
     await typeText("", 0);
     await typeText(">> Для запуску системи натисни кнопку", 20, "system-msg");
