@@ -12,11 +12,10 @@ body {
     padding: 10px;
     min-height: 100vh;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
     font-size: clamp(16px, 4vw, 24px);
     text-shadow: 0 0 5px #33ff00;
     line-height: 1.4;
-    padding-top: 70px;
 }
 
 body::before {
@@ -53,6 +52,8 @@ body::before {
     position: relative;
     z-index: 3;
     padding: 10px;
+    padding-top: 50px;
+    padding-bottom: 100px;
 }
 
 .line {
@@ -144,4 +145,3 @@ button.btn:disabled {
         margin-bottom: 2px;
     }
 }
-
