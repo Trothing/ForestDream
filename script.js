@@ -57,7 +57,6 @@ async function typeText(text, speed = 30, className = "") {
     for (let i = 0; i < text.length; i++) {
         cursor.before(text[i]);
         await sleep(speed);
-        consoleDiv.scrollTop = consoleDiv.scrollHeight;
 
     }
 
@@ -236,3 +235,4 @@ async function startSequence() {
 }
 
 startSequence();
+
