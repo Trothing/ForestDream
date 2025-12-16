@@ -1,6 +1,46 @@
 const consoleDiv = document.getElementById('console');
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+let audioContext = null;
+let backgroundMusic = null;
+let typingSound = null;
+let musicStarted = false;
+
+function initAudio() {
+    if (!musicStarted) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        backgroundMusic = new Audio('music.mp3');
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.1;
+
+        const source1 = audioContext.createMediaElementSource(backgroundMusic);
+        source1.connect(audioContext.destination);
+
+        typingSound = new Audio('typing.mp3');
+        typingSound.loop = true;
+        typingSound.volume = 0.5;
+
+        const source2 = audioContext.createMediaElementSource(typingSound);
+        source2.connect(audioContext.destination);
+
+        backgroundMusic.play().catch(e => console.log('Music play failed:', e));
+        musicStarted = true;
+    }
+}
+
+function startTypingSound() {
+    if (typingSound && typingSound.paused) {
+        typingSound.play().catch(e => console.log('Typing sound failed:', e));
+    }
+}
+
+function stopTypingSound() {
+    if (typingSound && !typingSound.paused) {
+        typingSound.pause();
+    }
+}
+
 async function typeText(text, speed = 30, className = "") {
     const line = document.createElement('div');
     line.className = 'line ' + className;
@@ -10,12 +50,18 @@ async function typeText(text, speed = 30, className = "") {
     cursor.className = 'cursor';
     line.appendChild(cursor);
 
+    if (text.length > 0) {
+        startTypingSound();
+    }
+
     for (let i = 0; i < text.length; i++) {
         cursor.before(text[i]);
         await sleep(speed);
         window.scrollTo(0, document.body.scrollHeight);
     }
 
+    // Зупиняємо звук друку
+    stopTypingSound();
     cursor.remove();
 }
 
@@ -43,10 +89,15 @@ async function clearScreen() {
 
 async function simulateTyping(text, elementId) {
     const element = document.getElementById(elementId);
+
+    startTypingSound();
+
     for (let i = 0; i < text.length; i++) {
         element.textContent += text[i];
         await sleep(150);
     }
+
+    stopTypingSound();
 }
 
 async function bootSequence() {
@@ -107,6 +158,17 @@ async function messageSequence() {
     await sleep(300);
     await typeText("> Я думаю, що ми могли б відновити наше спілкування", 50);
     await typeText("> Мені просто цікаво, як ти.", 50);
+    await sleep(800);
+    await typeText("", 0);
+    await typeText("LOADING: casual_questions.dat", 15, "system-msg");
+    await sleep(300);
+    await typeText("> Як день?", 50);
+    await typeText("> Що снідала?", 50);
+    await typeText("> Що нового у житті?", 50);
+    await typeText("> Все добре?", 50);
+    await sleep(500);
+    await typeText("SYSTEM: Questions loaded successfully", 15, "system-msg");
+
 
     await sleep(1000);
     await typeText("", 0);
@@ -123,7 +185,7 @@ async function messageSequence() {
     const cursorEl = document.getElementById('userInput').nextElementSibling;
     if (cursorEl) cursorEl.remove();
 
-    await typeText("[ERROR] Некоректна відповідь. Ти точно хотіла написати 'Y'!", 30, "error");
+    await typeText("[ERROR] Некоректна відповідь. Ти точно хотіла написати 'Y'.", 30, "error");
     await sleep(600);
     await typeText("SYSTEM: Автокорекція активована... Інтерпретовано як 'Y'", 20, "system-msg");
     await sleep(800);
@@ -145,9 +207,31 @@ async function finalSequence() {
 }
 
 async function startSequence() {
-    await bootSequence();
-    await messageSequence();
-    await finalSequence();
+    await typeText("SYSTEM_RESTORE.EXE", 20, "system-msg");
+    await typeText("", 0);
+    await typeText(">> Для запуску системи натисни кнопку", 20, "system-msg");
+    await sleep(300);
+
+    const startBtnLine = document.createElement('div');
+    startBtnLine.className = 'line';
+    const startBtn = document.createElement('button');
+    startBtn.className = 'btn';
+    startBtn.textContent = '▶ ЗАПУСТИТИ СИСТЕМУ';
+    startBtn.style.cursor = 'pointer';
+    startBtn.onclick = async function() {
+        initAudio();
+        this.disabled = true;
+        this.textContent = '✓ СИСТЕМА ЗАПУЩЕНА';
+        await sleep(500);
+        startBtnLine.remove();
+        await bootSequence();
+        await messageSequence();
+        await finalSequence();
+    };
+
+    startBtnLine.innerHTML = '> ';
+    startBtnLine.appendChild(startBtn);
+    consoleDiv.appendChild(startBtnLine);
 }
 
 startSequence();
