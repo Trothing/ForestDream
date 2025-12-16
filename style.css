@@ -150,3 +150,17 @@ button.btn:disabled {
         margin-bottom: 2px;
     }
 }
+#console::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+/* Firefox */
+#console {
+    scrollbar-width: none;
+}
+
+/* Старий Edge / IE */
+#console {
+    -ms-overflow-style: none;
+}
